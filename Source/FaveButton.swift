@@ -42,7 +42,7 @@ public extension FaveButtonDelegate{
 
 open class FaveButton: UIButton {
     
-    fileprivate struct Const{
+    public struct Const{
         static let duration             = 1.0
         static let expandDuration       = 0.1298 
         static let collapseDuration     = 0.1089
@@ -59,18 +59,19 @@ open class FaveButton: UIButton {
     
     @IBOutlet open weak var delegate: AnyObject?
     
-    fileprivate(set) var sparkGroupCount: Int = 7
+    open var sparkGroupCount: Int = 7
     
-    fileprivate var faveIconImage:UIImage?
-    fileprivate var faveIcon: FaveIcon!
+    open var faveIconImage:UIImage?
+    open var faveIcon: FaveIcon!
     
     
-    override open var isSelected: Bool{
+    @objc override open var isSelected: Bool{
         didSet{
             animateSelect(self.isSelected, duration: Const.duration)
         }
     }
     
+    @objc(initWithFrame:FaveIconNormal:)
     convenience public init(frame: CGRect, faveIconNormal: UIImage?) {
         self.init(frame: frame)
         
@@ -112,7 +113,7 @@ extension FaveButton{
         
         faveIcon  = createFaveIcon(faveIconImage)
         
-        addActions()
+        // addActions()
     }
     
     
@@ -158,11 +159,11 @@ extension FaveButton{
 
 // MARK: actions
 extension FaveButton{
-    func addActions(){
+    @objc open func addActions(){
         self.addTarget(self, action: #selector(toggle(_:)), for: .touchUpInside)
     }
     
-    @objc func toggle(_ sender: FaveButton){
+    @objc open func toggle(_ sender: FaveButton){
         sender.isSelected = !sender.isSelected
         
         guard case let delegate as FaveButtonDelegate = self.delegate else{
@@ -179,7 +180,7 @@ extension FaveButton{
 
 // MARK: animation
 extension FaveButton{
-    fileprivate func animateSelect(_ isSelected: Bool, duration: Double){
+    @objc open func animateSelect(_ isSelected: Bool, duration: Double){
         let color  = isSelected ? selectedColor : normalColor
         
         faveIcon.animateSelect(isSelected, fillColor: color, duration: duration, delay: Const.faveIconShowDelay)
